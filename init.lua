@@ -185,8 +185,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 vim.keymap.set('n', '<leader>w', ':write<cr>', { desc = 'Write current buffer' })
+vim.keymap.set('n', '<leader>bc', ':bd<cr>', { desc = 'Close current buffer' })
 vim.keymap.set('n', '<leader>q', ':exit<cr>', { desc = 'Exit current buffer' })
-vim.keymap.set('n', '<leader>e', ':Vexplore<cr>', { desc = 'Open Netrw' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -225,6 +225,22 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    config = function()
+      vim.keymap.set( 'n', '<leader>o', ':Neotree toggle current reveal_force_cwd<cr>' )
+      vim.keymap.set( 'n', '<leader>e', ':Neotree reveal<cr>' )
+      vim.keymap.set( 'n', '<leader>bo', ':Neotree toggle show buffers right<cr>' )
+    end
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
