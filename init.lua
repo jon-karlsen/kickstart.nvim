@@ -187,6 +187,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>w', ':write<cr>', { desc = 'Write current buffer' })
 vim.keymap.set('n', '<leader>bc', ':bd<cr>', { desc = 'Close current buffer' })
 vim.keymap.set('n', '<leader>q', ':exit<cr>', { desc = 'Exit current buffer' })
+vim.keymap.set('i', 'kj', '<Esc>' )
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
