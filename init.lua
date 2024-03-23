@@ -226,6 +226,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  { 'gleam-lang/gleam.vim', lazy = false },
 
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -564,6 +565,9 @@ require('lazy').setup {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
+        gleam = {
+          cmd = { 'gleam', 'lsp' }
+        },
 
         lua_ls = {
           -- cmd = {...},
