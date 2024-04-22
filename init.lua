@@ -212,6 +212,8 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+vim.filetype.add({ extension = { templ = "templ" } })
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -581,10 +583,13 @@ require('lazy').setup {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        gleam = {
-          cmd = { 'gleam', 'lsp' }
+        templ = {},
+        html = {
+          filetypes = { "html", "templ" }
         },
-
+        htmx = {
+          filetypes = { "html", "templ" }
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
