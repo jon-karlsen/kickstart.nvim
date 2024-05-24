@@ -600,6 +600,7 @@ require('lazy').setup {
         htmx = {
           filetypes = { "html", "templ" }
         },
+        terraformls = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
