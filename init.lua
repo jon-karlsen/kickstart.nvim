@@ -228,7 +228,6 @@ vim.filetype.add({ extension = { templ = "templ" } })
 require('lazy').setup {
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  { 'gleam-lang/gleam.vim', lazy = false },
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -654,6 +653,7 @@ require('lazy').setup {
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
+            require('lspconfig').gleam.setup({})
           end,
         },
       }
