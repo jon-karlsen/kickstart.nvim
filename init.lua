@@ -603,7 +603,9 @@ require('lazy').setup {
         htmx = {
           filetypes = { "html", "templ" }
         },
-        terraformls = {},
+        terraformls = {
+          filetypes = { "tf", "tfvars" }
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
@@ -857,6 +859,5 @@ require('lazy').setup {
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 }
-
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
