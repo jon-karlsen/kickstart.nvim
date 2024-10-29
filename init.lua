@@ -226,6 +226,15 @@ vim.filetype.add({ extension = { templ = "templ" } })
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter"
+    }
+  },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   {
@@ -577,18 +586,14 @@ require('lazy').setup {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {
-            settings = {
-              python = {
-                analysis = {
-                  typeCheckingMode = "off",
-                  autoSearchPaths = true,
-                  useLibraryCodeForTypes = true
-                }
-              }
-            }
+        denols = {
+          root_dir = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc"),
         },
-        -- rust_analyzer = {},
+        rust_analyzer = {},
+        tsserver = {
+          root_dir = require("lspconfig.util").root_pattern("package.json"),
+          single_file_support = false,
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -597,11 +602,7 @@ require('lazy').setup {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        templ = {},
         html = {
-          filetypes = { "html", "templ" }
-        },
-        htmx = {
           filetypes = { "html", "templ" }
         },
         terraformls = {
@@ -660,7 +661,6 @@ require('lazy').setup {
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
-            require('lspconfig').gleam.setup({})
           end,
         },
       }
@@ -759,7 +759,23 @@ require('lazy').setup {
       }
     end,
   },
-
+  {
+    'AlexvZyl/nordic.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require 'nordic' .load()
+    end
+  },
+  {
+    "rose-pine/neovim",
+    lazy = false,
+    priority = 1000,
+    name = "rose-pine",
+    config = function()
+      vim.cmd.colorscheme 'rose-pine'
+    end,
+  },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is
@@ -770,10 +786,10 @@ require('lazy').setup {
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       -- Load the colorscheme here
-      vim.cmd.colorscheme 'catppuccin'
+      --vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like
-      vim.cmd.hi 'Comment gui=none'
+      --vim.cmd.hi 'Comment gui=none'
     end,
   },
 
