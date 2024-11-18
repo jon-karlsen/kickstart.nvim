@@ -785,12 +785,14 @@ require('lazy').setup {
     end,
   },
   {
-    'p00f/alabaster.nvim',
+    'kvrohit/substrata.nvim',
     config = function()
-      vim.cmd.colorscheme 'alabaster'
+      vim.cmd.colorscheme 'substrata'
     end,
   },
-
+  {
+    'shaunsingh/nord.nvim',
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
