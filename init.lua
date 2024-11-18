@@ -586,21 +586,14 @@ require('lazy').setup {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        denols = {
-          root_dir = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc"),
-        },
         rust_analyzer = {},
-        tsserver = {
-          root_dir = require("lspconfig.util").root_pattern("package.json"),
-          single_file_support = false,
-        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        ts_ls = {},
         --
         html = {
           filetypes = { "html", "templ" }
@@ -773,7 +766,7 @@ require('lazy').setup {
     priority = 1000,
     name = "rose-pine",
     config = function()
-      vim.cmd.colorscheme 'rose-pine'
+      --vim.cmd.colorscheme 'rose-pine'
     end,
   },
   { -- You can easily change to a different colorscheme.
@@ -785,11 +778,16 @@ require('lazy').setup {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      -- Load the colorscheme here
       --vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like
       --vim.cmd.hi 'Comment gui=none'
+    end,
+  },
+  {
+    'p00f/alabaster.nvim',
+    config = function()
+      vim.cmd.colorscheme 'alabaster'
     end,
   },
 
