@@ -203,6 +203,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_augroup("BladeFiletypeRelated", { clear = true }) -- Create or clear the autogroup
+
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+  pattern = "*.blade.php",  -- File pattern
+  command = "set ft=blade",   -- Set filetype to blade
+  group = "BladeFiletypeRelated", -- Associate with the autogroup
+})
+
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -769,6 +778,22 @@ require('lazy').setup {
       --vim.cmd.colorscheme 'rose-pine'
     end,
   },
+  {
+    "sho-87/kanagawa-paper.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('github-theme').setup({
+      })
+    end,
+  },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is
@@ -778,16 +803,10 @@ require('lazy').setup {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      --vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like
       --vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-  {
-    'kvrohit/substrata.nvim',
-    config = function()
-      vim.cmd.colorscheme 'substrata'
     end,
   },
   {
@@ -838,7 +857,15 @@ require('lazy').setup {
     build = ':TSUpdate',
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-
+      local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+      parser_config.blade = {
+        install_info = {
+          url = "https://github.com/EmranMR/tree-sitter-blade",
+          files = {"src/parser.c"},
+          branch = "main",
+        },
+        filetype = "blade"
+      }
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
         ensure_installed = { 'bash', 'python', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
