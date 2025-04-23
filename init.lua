@@ -189,6 +189,7 @@ vim.keymap.set('n', '<leader>bc', ':bd<cr>', { desc = 'Close current buffer' })
 vim.keymap.set('n', '<leader>q', ':exit<cr>', { desc = 'Exit current buffer' })
 vim.keymap.set('i', 'kj', '<Esc>' )
 
+vim.wo.relativenumber = true
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -274,7 +275,14 @@ require('lazy').setup {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
-      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+      -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    lazy = false, -- neo-tree will lazily load itself
+    ---@module "neo-tree"
+    ---@type neotree.Config?
+    opts = {
+      -- fill any relevant options here
+      close_if_last_window = true,
     },
     config = function()
       vim.keymap.set( 'n', '<leader>o', ':Neotree toggle current reveal_force_cwd<cr>' )
@@ -282,6 +290,21 @@ require('lazy').setup {
       vim.keymap.set( 'n', '<leader>bo', ':Neotree toggle show buffers right<cr>' )
     end
   },
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   branch = "v3.x",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+  --     "MunifTanjim/nui.nvim",
+  --     -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+  --   },
+  --   config = function()
+  --     vim.keymap.set( 'n', '<leader>o', ':Neotree toggle current reveal_force_cwd<cr>' )
+  --     vim.keymap.set( 'n', '<leader>e', ':Neotree reveal<cr>' )
+  --     vim.keymap.set( 'n', '<leader>bo', ':Neotree toggle show buffers right<cr>' )
+  --   end
+  -- },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -376,7 +399,6 @@ require('lazy').setup {
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'edgedb/edgedb-vim' },
 
       -- Useful for getting pretty icons, but requires special font.
       --  If you already have a Nerd Font, or terminal set up with fallback fonts
@@ -766,14 +788,6 @@ require('lazy').setup {
     end,
   },
   {
-    'AlexvZyl/nordic.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require 'nordic' .load()
-    end
-  },
-  {
     "rose-pine/neovim",
     lazy = false,
     priority = 1000,
@@ -789,14 +803,11 @@ require('lazy').setup {
     opts = {},
   },
   {
-    'projekt0n/github-nvim-theme',
-    name = 'github-theme',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+    "vague2k/vague.nvim",
     config = function()
-      require('github-theme').setup({
-      })
-    end,
+        vim.cmd.colorscheme 'vague'
+        vim.cmd.hi 'Comment gui=none'
+      end
   },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -807,7 +818,7 @@ require('lazy').setup {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      vim.cmd.colorscheme 'catppuccin'
+      -- vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like
       --vim.cmd.hi 'Comment gui=none'
