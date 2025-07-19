@@ -236,6 +236,15 @@ vim.filetype.add({ extension = { templ = "templ" } })
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
+  'jose-elias-alvarez/null-ls.nvim', -- for formatting/linting
+  {
+    'stevearc/conform.nvim',
+    opts = {
+      formatters_by_ft = {
+        python = { "black", "ruff_format" },
+      },
+    },
+  },
   {
     "adalessa/laravel.nvim",
     dependencies = {
@@ -265,10 +274,6 @@ require('lazy').setup {
   },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  {
-    'Exafunction/codeium.vim',
-    event = 'BufEnter'
-  },
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -647,10 +652,20 @@ require('lazy').setup {
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
         ts_ls = {},
-        --
-        html = {
-          filetypes = { "html", "templ" }
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = "workspace", -- Changed from "openFilesOnly"
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = "basic"
+              },
+              pythonPath = ".venv/bin/python"
+            }
+          }
         },
+        --
         terraformls = {
           filetypes = { "tf", "tfvars" }
         },
@@ -936,6 +951,11 @@ require('lazy').setup {
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 }
+
+vim.cmd([[
+  autocmd BufNewFile,BufRead *.html set filetype=htmldjango
+  autocmd BufNewFile,BufRead *.py set filetype=python
+]])
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 require('lualine').setup()
