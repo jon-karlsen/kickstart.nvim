@@ -236,6 +236,7 @@ vim.filetype.add({ extension = { templ = "templ" } })
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
+  { "windwp/nvim-ts-autotag", config = true },
   'jose-elias-alvarez/null-ls.nvim', -- for formatting/linting
   {
     'stevearc/conform.nvim',
@@ -641,17 +642,22 @@ require('lazy').setup {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      local util = require("lspconfig.util")
+
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
-        ts_ls = {},
+
+        eslint = {
+          root_dir = util.root_pattern(
+            "eslint.config.js","eslint.config.cjs","eslint.config.mjs",
+            ".eslintrc",".eslintrc.js",".eslintrc.cjs",".eslintrc.json",
+            "package.json"
+          ),
+          settings = { workingDirectory = { mode = "auto" } },
+        },
+
+
         pyright = {
           settings = {
             python = {
@@ -838,9 +844,8 @@ require('lazy').setup {
   {
     "vague2k/vague.nvim",
     config = function()
-        vim.cmd.colorscheme 'vague'
-        vim.cmd.hi 'Comment gui=none'
-      end
+      vim.cmd.hi 'Comment gui=none'
+    end
   },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -851,7 +856,7 @@ require('lazy').setup {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      -- vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like
       --vim.cmd.hi 'Comment gui=none'
@@ -916,8 +921,9 @@ require('lazy').setup {
       }
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'python', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
-        -- Autoinstall languages that are not installed
+        ensure_installed = { 'bash','python','c','html','lua','markdown','vim','vimdoc',
+          'vue','typescript','tsx','javascript','json','jsonc','yaml',
+          'css','scss' },
         auto_install = true,
         highlight = { enable = true },
         indent = { enable = true },
@@ -956,6 +962,45 @@ vim.cmd([[
   autocmd BufNewFile,BufRead *.html set filetype=htmldjango
   autocmd BufNewFile,BufRead *.py set filetype=python
 ]])
+
+local vue_language_server_path = vim.fn.expand '$MASON/packages' .. '/vue-language-server' .. '/node_modules/@vue/language-server'
+local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
+local vue_plugin = {
+  name = '@vue/typescript-plugin',
+  location = vue_language_server_path,
+  languages = { 'vue' },
+  configNamespace = 'typescript',
+}
+local vtsls_config = {
+  settings = {
+    vtsls = {
+      tsserver = {
+        globalPlugins = {
+          vue_plugin,
+        },
+      },
+    },
+  },
+  filetypes = tsserver_filetypes,
+}
+
+local ts_ls_config = {
+  init_options = {
+    plugins = {
+      vue_plugin,
+    },
+  },
+  filetypes = tsserver_filetypes,
+}
+
+-- If you are on most recent `nvim-lspconfig`
+local vue_ls_config = {}
+
+vim.lsp.config('vtsls', vtsls_config)
+vim.lsp.config('vue_ls', vue_ls_config)
+vim.lsp.config('ts_ls', ts_ls_config)
+vim.lsp.enable({'vtsls', 'vue_ls'})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 require('lualine').setup()
