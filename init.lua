@@ -645,6 +645,7 @@ require('lazy').setup {
       local util = require("lspconfig.util")
 
       local servers = {
+        postgres_lsp = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 
